@@ -1,0 +1,1 @@
+# Backend package for Van Gogh animation generation 
