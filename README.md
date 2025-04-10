@@ -9,32 +9,32 @@ Each painting responds differently to the animation process, with the resulting 
 ## Van Gogh Collection
 
 ### Starry Night
-![Starry Night Animation](../output/animated_stary-night.gif)
+![Starry Night Animation](./output/animated_stary-night.gif)
 
 The swirling brushstrokes in Van Gogh's iconic "Starry Night" create natural flow patterns that produce a mesmerizing animation effect. The algorithm effectively captures the circular motion in the sky and transforms it into dynamic movement.
 
 ### Starry Night Over the Rhone
-![Starry Night Over the Rhone Animation](../output/animated_Starry-Night-Over-the-Rhone-Featured.gif)
+![Starry Night Over the Rhone Animation](./output/animated_Starry-Night-Over-the-Rhone-Featured.gif)
 
 Another variation of Van Gogh's night sky work, where the reflections on water create an additional dimension of movement. Note how the algorithm detects and animates both the sky patterns and their reflections in the water.
 
 ### Wheatfield with Crows
-![Wheatfield with Crows Animation](../output/animated_wheatfield-with-crows.gif)
+![Wheatfield with Crows Animation](./output/animated_wheatfield-with-crows.gif)
 
 The dramatic brushwork in this painting creates bold movement patterns. The algorithm captures the sweeping strokes in the wheat field and the dynamic energy in the sky.
 
 ### Wheatfield with Cypresses
-![Wheatfield with Cypresses Animation](../output/animated_wheatfield-with-cypresses.gif)
+![Wheatfield with Cypresses Animation](./output/animated_wheatfield-with-cypresses.gif)
 
 The undulating cypress trees and wheat field in this painting lend themselves perfectly to animation. The algorithm highlights Van Gogh's characteristic swirling brushstrokes, bringing movement to both the trees and field.
 
 ### Vincent Portrait
-![Vincent Portrait Animation](../output/animated_vincent.gif)
+![Vincent Portrait Animation](./output/animated_vincent.gif)
 
 Even in this self-portrait, the algorithm identifies and animates the distinctive brushwork patterns, creating subtle movement that respects the subject while emphasizing Van Gogh's unique style.
 
 ### Loving Vincent
-![Loving Vincent Animation](../output/animated_loving-vincent.gif)
+![Loving Vincent Animation](./output/animated_loving-vincent.gif)
 
 This animation captures the flowing brushwork from another Van Gogh-inspired piece, demonstrating how the algorithm works effectively across various interpretations of the artist's style.
 
