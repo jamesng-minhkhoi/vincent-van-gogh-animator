@@ -2,6 +2,7 @@ import numpy as np
 import cv2
 import imageio
 import os
+from skimage.filters import gabor
 
 # === Paths ===
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -18,97 +19,16 @@ GABOR_THRESHOLD = 0.22
 MAX_DISPLACEMENT = 15.0
 
 # Define orientations for stroke detection (in radians)
-ORIENTATIONS = [np.pi/6, np.pi/3, np.pi/2, 2*np.pi/3, 5*np.pi/6]
-
-def create_gabor_kernel(ksize, sigma, theta, lambd, gamma, psi):
-    """
-    Create a Gabor kernel with the given parameters
-    
-    Parameters:
-    - ksize: Size of the kernel (width, height)
-    - sigma: Standard deviation of the Gaussian envelope
-    - theta: Orientation of the Gabor filter in radians
-    - lambd: Wavelength of the sinusoidal factor
-    - gamma: Spatial aspect ratio
-    - psi: Phase offset of the sinusoidal factor
-    
-    Returns:
-    - Gabor kernel
-    """
-    # Convert size to sigma for Gabor function
-    sigma_x = sigma
-    sigma_y = sigma / gamma
-    
-    # Calculate half size
-    xmax = ksize[0] // 2
-    ymax = ksize[1] // 2
-    
-    # Create grid
-    y, x = np.mgrid[-ymax:ymax+1, -xmax:xmax+1]
-    
-    # Rotation
-    xprime = x * np.cos(theta) + y * np.sin(theta)
-    yprime = -x * np.sin(theta) + y * np.cos(theta)
-    
-    # Calculate Gabor kernel
-    gaussian = np.exp(-(xprime**2 / (2 * sigma_x**2) + yprime**2 / (2 * sigma_y**2)))
-    sinusoid = np.cos(2 * np.pi * xprime / lambd + psi)
-    
-    kernel = gaussian * sinusoid
-    
-    # Normalize kernel
-    kernel = kernel - np.mean(kernel)
-    kernel = kernel / np.sqrt(np.sum(kernel**2)) if np.sum(kernel**2) > 0 else kernel
-    
-    return kernel
-
-def apply_gabor_filter(image, kernel):
-    """
-    Apply Gabor filter to an image
-    
-    Parameters:
-    - image: Input image
-    - kernel: Gabor kernel
-    
-    Returns:
-    - Filtered image
-    """
-    # Apply filter using convolution
-    filtered = cv2.filter2D(image, cv2.CV_32F, kernel)
-    
-    # Get the absolute value (magnitude of response)
-    magnitude = np.abs(filtered)
-    
-    # Normalize the output
-    magnitude = magnitude / magnitude.max() if magnitude.max() > 0 else magnitude
-    
-    return magnitude
+ORIENTATIONS = [ np.pi/6, np.pi/3, np.pi/2, 2*np.pi/3, 5*np.pi/6]
 
 def gabor_responses(gray):
     """Apply Gabor filter for different orientations to extract stroke features"""
     responses = []
-    
-    # Gabor parameters
-    ksize = (31, 31)  # Filter size
-    sigma = 5.0       # Standard deviation of the Gaussian envelope
-    lambd = 1.0 / ANIMATE_FREQUENCY  # Wavelength of the sinusoidal factor
-    gamma = 0.5       # Spatial aspect ratio
-    psi = 0           # Phase offset
-    
     for theta in ORIENTATIONS:
-        # Create Gabor kernel
-        kernel = create_gabor_kernel(ksize, sigma, theta, lambd, gamma, psi)
-        
-        # Apply filter and get magnitude
-        magnitude = apply_gabor_filter(gray, kernel)
-        
-        # Save kernel for debugging
-        kernel_vis = (kernel - np.min(kernel)) / (np.max(kernel) - np.min(kernel)) * 255
-        cv2.imwrite(os.path.join(DEBUG_DIR, f"gabor_kernel_theta_{theta:.2f}.png"), 
-                   kernel_vis.astype(np.uint8))
-        
+        real, imag = gabor(gray, frequency=ANIMATE_FREQUENCY, theta=theta)
+        magnitude = np.sqrt(real**2 + imag**2)
+        magnitude = (magnitude / magnitude.max()) if magnitude.max() > 0 else magnitude
         responses.append((magnitude, theta))
-    
     return responses
 
 def create_angle_specific_masks(gray):
